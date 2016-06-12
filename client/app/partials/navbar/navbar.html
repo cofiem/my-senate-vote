@@ -1,0 +1,34 @@
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container">
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" ng-click="isCollapsed = !isCollapsed" data-toggle="collapse"
+              data-target="#navbar-collapse-container" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" ng-href="{{vm.$state.href('home')}}">{{vm.projectInfo.longName}}</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navbar-collapse-container" uib-collapse="!isCollapsed">
+      <ul class="nav navbar-nav">
+        <li ng-class="{active: vm.$state.includes('act')}"><a ng-href="{{vm.$state.href('act')}}">ACT</a></li>
+        <li ng-class="{active: vm.$state.includes('nsw')}"><a ng-href="{{vm.$state.href('nsw')}}">NSW</a></li>
+        <li ng-class="{active: vm.$state.includes('nt')}"><a ng-href="{{vm.$state.href('nt')}}">NT</a></li>
+        <li ng-class="{active: vm.$state.includes('qld')}"><a ng-href="{{vm.$state.href('qld')}}">QLD</a></li>
+        <li ng-class="{active: vm.$state.includes('sa')}"><a ng-href="{{vm.$state.href('sa')}}">SA</a></li>
+        <li ng-class="{active: vm.$state.includes('tas')}"><a ng-href="{{vm.$state.href('tas')}}">TAS</a></li>
+        <li ng-class="{active: vm.$state.includes('vic')}"><a ng-href="{{vm.$state.href('vic')}}">VIC</a></li>
+        <li ng-class="{active: vm.$state.includes('wa')}"><a ng-href="{{vm.$state.href('wa')}}">WA</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li ng-class="{active: vm.$state.includes('about')}"><a ng-href="{{vm.$state.href('about')}}">About</a></li>
+      </ul>
+    </div>
+
+  </div>
+</nav>

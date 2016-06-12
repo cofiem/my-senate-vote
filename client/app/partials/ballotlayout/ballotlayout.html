@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="col-md-7">
+    <h1>{{vm.stateNames[vm.stateName]}}</h1>
+  </div>
+  <div class="col-md-5 hidden-print">
+    <form>
+      <div class="input-group">
+        <label class="sr-only" for="candidateFilterValueInput">Filter:</label>
+        <span class="input-group-addon">
+          <i class="fa fa-search"></i>
+        </span>
+        <input type="text" class="form-control" id="candidateFilterValueInput" ng-model="vm.candidateFilterValue"
+               aria-label="Filter by name, state, party, etc..." placeholder="Filter by name, state, party, etc...">
+        <span class="input-group-btn">
+        <button class="btn btn-default" type="button">
+          <i class="fa fa-times"></i>
+          Clear
+        </button>
+      </span>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ballotbuilder election-state="{{vm.stateName}}" candidate-filter="vm.candidateFilterValue"></ballotbuilder>

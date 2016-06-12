@@ -1,0 +1,42 @@
+<p>Showing <strong>{{filteredArray.length}}</strong> of <strong>{{vmData.data.length}}</strong> candidates.</p>
+<div class="row" ng-init="vmData = {data: vm.stateData()}">
+  <div class="col-md-3" ng-repeat-start="candidate in vmData.data | filterCandidates:vm.candidateFilter as filteredArray">
+    <div class="panel panel-default candidate-panel" id="{{vm.buildId(candidate)}}">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{candidate.ballot_given_nm}} {{candidate.surname}}</h3>
+        <small>{{candidate.party_ballot_nm}}</small>
+      </div>
+      <div class="panel-body">
+        <p>
+          Group <strong>{{candidate.ticket}}</strong>
+          Position <strong>{{candidate.ballot_position}}</strong>
+        </p>
+        <p ng-show="candidate.occupation">
+          Occupation: {{candidate.occupation}}
+        </p>
+        <!--
+        <p ng-show="candidate.contact_fax ">
+          Fax: {{candidate.contact_fax}}
+        </p>
+        <p ng-show="candidate.contact_email  ">
+          Email: <a href="mailto:{{candidate.contact_email}}">{{candidate.contact_email}}</a>
+        </p>
+        <p ng-show="candidate.contact_mobile_no  ">
+          Mobile Ph: {{candidate.contact_mobile_no}}
+        </p>
+        <p ng-show="candidate.contact_work_ph  ">
+          Work Ph: {{candidate.contact_work_ph}}
+        </p>
+        <p ng-show="candidate.contact_home_ph  ">
+          Home Ph: {{candidate.contact_home_ph}}
+        </p>
+        -->
+      </div>
+    </div>
+  </div>
+  <div class="clearfix" ng-if="$index % 4 == 3"></div>
+  <div ng-repeat-end=""></div>
+</div>
+
+
+
