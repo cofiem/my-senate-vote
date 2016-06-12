@@ -10,9 +10,9 @@
           <i class="fa fa-search"></i>
         </span>
         <input type="text" class="form-control" id="candidateFilterValueInput" ng-model="vm.candidateFilterValue"
-               aria-label="Filter by name, state, party, etc..." placeholder="Filter by name, state, party, etc...">
+               aria-label="Find a candidate by name, party, or occupation" placeholder="Find a candidate by name, party, or occupation">
         <span class="input-group-btn">
-        <button class="btn btn-default" type="button">
+        <button class="btn btn-default" type="button" ng-click="vm.candidateFilterValue = null">
           <i class="fa fa-times"></i>
           Clear
         </button>

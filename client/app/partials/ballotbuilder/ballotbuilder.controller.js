@@ -3,6 +3,9 @@ class BallotbuilderController {
     this.name = 'ballotbuilder';
     this.senateData = senateData;
     this.candidateFilter = null;
+    this.candidateOrder = [];
+    this.stateCandidatesOnly = this.stateData();
+    this.stateCandidatesCount = this.stateCandidatesOnly.length;
   }
 
   stateData() {

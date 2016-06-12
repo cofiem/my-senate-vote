@@ -1,10 +1,14 @@
-<p>Showing <strong>{{filteredArray.length}}</strong> of <strong>{{vmData.data.length}}</strong> candidates.</p>
-<div class="row" ng-init="vmData = {data: vm.stateData()}">
-  <div class="col-md-3" ng-repeat-start="candidate in vmData.data | filterCandidates:vm.candidateFilter as filteredArray">
-    <div class="panel panel-default candidate-panel" id="{{vm.buildId(candidate)}}">
+<p>Showing <strong>{{filteredArray.length}}</strong> of <strong>{{vm.stateCandidatesCount}}</strong> candidates.</p>
+<div class="row">
+  <div class="col-md-3" ng-repeat-start="candidate in vm.stateCandidatesOnly | filterCandidates:vm.candidateFilter as filteredArray">
+    <div class="panel panel-default candidate-panel" ng-init="candidateData = {id: vm.buildId(candidate)}" id="{{candidateData.id}}">
       <div class="panel-heading">
+        <form class="form-inline pull-right">
+          <input type="number" min="1" max="{{vm.stateCandidatesCount}}" step="1" class="form-control" style="width:70px;" class="form-control" />
+        </form>
         <h3 class="panel-title">{{candidate.ballot_given_nm}} {{candidate.surname}}</h3>
         <small>{{candidate.party_ballot_nm}}</small>
+
       </div>
       <div class="panel-body">
         <p>
