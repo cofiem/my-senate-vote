@@ -12,6 +12,8 @@ let ballotbuilderModule = angular.module('ballotbuilder', [
       if (filterString) {
         return candidatesArray.filter(function (element, index, array) {
 
+          //console.log(element);
+
           var firstName = element.hasOwnProperty('ballot_given_nm') &&
             element.ballot_given_nm.toUpperCase().includes(filterStringUpper);
           var lastName = element.hasOwnProperty('surname') &&
@@ -20,8 +22,10 @@ let ballotbuilderModule = angular.module('ballotbuilder', [
             element.party_ballot_nm.toUpperCase().includes(filterStringUpper);
           var occupation = element.hasOwnProperty('occupation') &&
             element.occupation.toUpperCase().includes(filterStringUpper);
+          var search_attr = element.hasOwnProperty('search_attr') &&
+            element.search_attr.toUpperCase().includes(filterStringUpper);
 
-          return firstName || lastName || partyName || occupation;
+          return firstName || lastName || partyName || occupation || search_attr;
         });
       } else {
         return candidatesArray;

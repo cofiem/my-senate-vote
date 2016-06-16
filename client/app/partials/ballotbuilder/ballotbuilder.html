@@ -1,12 +1,32 @@
-<p>Showing <strong>{{filteredArray.length}}</strong> of <strong>{{vm.stateCandidatesCount}}</strong> candidates.</p>
+<div class="row" style="margin-bottom: 5px;">
+  <div class="col-md-4">
+    Showing <strong>{{filteredArray.length}}</strong> of <strong>{{vm.stateCandidatesCount}}</strong> candidates.
+  </div>
+  <div class="col-md-4">
+    <div class="btn-group" role="group" aria-label="actions">
+      <button type="button" class="btn btn-default" ng-click="vm.checkBallotEnteredNumbers()">Check my ballot paper</button>
+      <button type="button" class="btn btn-default" ng-click="vm.createPdf()">Create pdf for printing</button>
+    </div>
+  </div>
+  <div class="col-md-4 text-right">
+    <span class="label label-default">Most recent: {{vm.mostRecentEnteredNumber}}</span>
+    <span class="label label-default">Total placed: {{vm.totalEnteredNumbers}}</span>
+    <button type="button" class="btn btn-default" ng-click="vm.clearEnteredNumbers()">Clear all</button>
+  </div>
+</div>
 <div class="row">
   <div class="col-md-3" ng-repeat-start="candidate in vm.stateCandidatesOnly | filterCandidates:vm.candidateFilter as filteredArray">
     <div class="panel panel-default candidate-panel" ng-init="candidateData = {id: vm.buildId(candidate)}" id="{{candidateData.id}}">
       <div class="panel-heading">
         <form class="form-inline pull-right">
-          <input type="number" min="1" max="{{vm.stateCandidatesCount}}" step="1" class="form-control" style="width:70px;" class="form-control" />
+          <input type="text" min="1" max="{{vm.stateCandidatesCount}}" step="1" class="form-control"
+                 style="width:55px;" class="form-control" ng-model="candidate.enteredNumber"
+                 pattern="^[0-9]{0,3}$" ng-pattern-restrict="^[0-9]{0,3}$"
+          ng-change="vm.ballotNumberChange(candidate.enteredNumber)"/>
         </form>
-        <h3 class="panel-title">{{candidate.ballot_given_nm}} {{candidate.surname}}</h3>
+        <h3 class="panel-title">
+          <a href="">{{candidate.ballot_given_nm}} {{candidate.surname}}</a>
+        </h3>
         <small>{{candidate.party_ballot_nm}}</small>
 
       </div>

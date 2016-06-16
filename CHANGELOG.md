@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [keeps a c
 
 ### Added
 
+ - [2016-06-17] Added validation, hints, most of modal for showing validation messages.
  - [2016-06-12] Created project, added senate candidates file, created base layout
 
 # Types of changes
