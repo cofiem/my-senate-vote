@@ -1,4 +1,6 @@
 import angular from 'angular';
+import ngAnimate from 'angular-animate'
+import ngAria from 'angular-aria'
 import uiRouter from 'angular-ui-router';
 import uiBootstrap from 'angular-ui-bootstrap';
 import 'ng-pattern-restrict/src/ng-pattern-restrict';
@@ -8,6 +10,8 @@ import Models from './models/models';
 import AppComponent from './app.component';
 
 angular.module('app', [
+  ngAnimate,
+  ngAria,
   uiRouter,
   uiBootstrap,
   'ngPatternRestrict',

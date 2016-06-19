@@ -2,13 +2,16 @@ class BallotbuilderController {
   constructor(senateData, $uibModal) {
     this.name = 'ballotbuilder';
     this.senateData = senateData;
-    this.$uibModal = $uibModal;
     this.candidateFilter = null;
     this.candidateOrder = [];
     this.stateCandidatesOnly = this.stateData();
     this.stateCandidatesCount = this.stateCandidatesOnly.length;
     this.mostRecentEnteredNumber = '?';
     this.totalEnteredNumbers = 0;
+    this.enteredNumbers = [];
+    this.ballotErrors = [];
+    this.showModal = false;
+    this.$uibModal = $uibModal;
   }
 
   stateData() {
@@ -29,55 +32,51 @@ class BallotbuilderController {
   checkBallotEnteredNumbers() {
     // You can vote below the line by numbering at least 12 boxes consecutively in the order of your choice (with number 1 as your first choice).
 
-    var enteredNumbers = [];
+    this.enteredNumbers = [];
+    this.ballotErrors = [];
 
     var candidatesCount = this.stateCandidatesOnly.length;
     for (var i = 0, c = candidatesCount; i < c; i++) {
       var candidate = this.stateCandidatesOnly[i];
       var enteredNumber = Number.parseInt(candidate.enteredNumber, 10);
       if (Number.isInteger(enteredNumber)) {
-        enteredNumbers.push(enteredNumber);
+        this.enteredNumbers.push(enteredNumber);
       }
     }
 
-    enteredNumbers = enteredNumbers.sort(function (a, b) {
+    this.enteredNumbers = this.enteredNumbers.sort(function (a, b) {
       return a - b;
     });
 
-    var errors = [];
-
     // bounds
     var minBound = 1;
-    var withinBounds = enteredNumbers.every(function (currentValue, index, array) {
+    var withinBounds = this.enteredNumbers.every(function (currentValue, index, array) {
       return currentValue >= minBound && currentValue <= candidatesCount;
     });
 
     if (!withinBounds) {
-      errors.push("A number is less than 1 or more than " + candidatesCount + ".");
+      this.ballotErrors.push("A number is less than 1 or more than " + candidatesCount + ".");
     }
 
     // unique
-    var unique = enteredNumbers.every(function (currentValue, index, array) {
+    var unique = this.enteredNumbers.every(function (currentValue, index, array) {
       return array.indexOf(currentValue) === index;
     });
 
     if (!unique) {
-      errors.push("A number is used more than once.");
+      this.ballotErrors.push("A number is used more than once.");
     }
 
     // must be consecutive and must include at least the numbers 1 - 12
-    var consecutive = enteredNumbers.every(function (currentValue, index, array) {
+    var consecutive = this.enteredNumbers.every(function (currentValue, index, array) {
       return currentValue === (index + 1);
     });
 
-    if (!consecutive || enteredNumbers.length < 12) {
-      errors.push("A number is missing. Number at least 12 boxes consecutively, starting with 1, in the order of your choice.");
+    if (!consecutive || this.enteredNumbers.length < 12) {
+      this.ballotErrors.push("A number is missing. Number at least 12 boxes consecutively, starting with 1, in the order of your choice.");
     }
 
-    console.log(enteredNumbers, errors);
-
-    //var modalInstance = this.openModal(errors);
-
+    this.showModal = true;
   }
 
   buildObjEnteredNumbers() {
@@ -124,17 +123,8 @@ class BallotbuilderController {
     this.totalEnteredNumbers = 0;
   }
 
-  openModal(errors) {
-    var modalInstance = this.$uibModal.open({
-      animation: true,
-      templateUrl: 'modalContent.html',
-      controllerAs: 'vmModel',
-      resolve: {
-        errors: errors
-      }
-    });
-
-    return modalInstance;
+  modalClosed(){
+    this.showModal = false;
   }
 
 }
