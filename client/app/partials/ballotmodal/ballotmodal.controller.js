@@ -1,10 +1,10 @@
+/*
 class BallotmodalController {
   constructor($uibModal, $log) {
     this.name = 'ballotmodal';
     this.$uibModal = $uibModal;
     this.log = $log;
 
-    this.showModal = false;
     this.errors = [];
     // see https://github.com/angular-ui/bootstrap/issues/5683
     this.modalInstance = null;
@@ -32,7 +32,7 @@ class BallotmodalController {
       animation: true,
       templateUrl: 'ballotmodal.html',
       controller:  function() {
-        this.errors = 
+        this.errors =
       },
       controllerAs: '$ctrl'
     });
@@ -45,3 +45,4 @@ class BallotmodalController {
 BallotmodalController.$inject = ['$uibModal', '$log'];
 
 export default BallotmodalController;
+*/

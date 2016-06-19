@@ -3,10 +3,8 @@
     Showing <strong>{{filteredArray.length}}</strong> of <strong>{{vm.stateCandidatesCount}}</strong> candidates.
   </div>
   <div class="col-md-4">
-    <div class="btn-group" role="group" aria-label="actions">
-      <button type="button" class="btn btn-default" ng-click="vm.checkBallotEnteredNumbers()">Check my ballot paper</button>
-      <button type="button" class="btn btn-default" ng-click="vm.createPdf()">Create pdf for printing</button>
-    </div>
+    <ballotmodal title="My Title" component="test-component" errors="vm.checkBallotEnteredNumbers()"></ballotmodal>
+    <button type="button" class="btn btn-default" ng-click="vm.createPdf()">Create pdf for printing</button>
   </div>
   <div class="col-md-4 text-right">
     <span class="label label-default">Most recent: {{vm.mostRecentEnteredNumber}}</span>
@@ -15,14 +13,16 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-3" ng-repeat-start="candidate in vm.stateCandidatesOnly | filterCandidates:vm.candidateFilter as filteredArray">
-    <div class="panel panel-default candidate-panel" ng-init="candidateData = {id: vm.buildId(candidate)}" id="{{candidateData.id}}">
+  <div class="col-md-3"
+       ng-repeat-start="candidate in vm.stateCandidatesOnly | filterCandidates:vm.candidateFilter as filteredArray">
+    <div class="panel panel-default candidate-panel" ng-init="candidateData = {id: vm.buildId(candidate)}"
+         id="{{candidateData.id}}">
       <div class="panel-heading">
         <form class="form-inline pull-right">
           <input type="text" min="1" max="{{vm.stateCandidatesCount}}" step="1" class="form-control"
                  style="width:55px;" class="form-control" ng-model="candidate.enteredNumber"
                  pattern="^[0-9]{0,3}$" ng-pattern-restrict="^[0-9]{0,3}$"
-          ng-change="vm.ballotNumberChange(candidate.enteredNumber)"/>
+                 ng-change="vm.ballotNumberChange(candidate.enteredNumber)"/>
         </form>
         <h3 class="panel-title">
           <a href="">{{candidate.ballot_given_nm}} {{candidate.surname}}</a>
@@ -61,6 +61,4 @@
   <div class="clearfix" ng-if="$index % 4 == 3"></div>
   <div ng-repeat-end=""></div>
 </div>
-
-<ballotmodal errors="vm.ballotErrors" show-modal="vm.showModal" on-close="vm.modalClosed()"></ballotmodal>
 

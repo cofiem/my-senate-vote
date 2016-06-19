@@ -1,5 +1,5 @@
 class BallotbuilderController {
-  constructor(senateData, $uibModal) {
+  constructor(senateData, $uibModal, $log) {
     this.name = 'ballotbuilder';
     this.senateData = senateData;
     this.candidateFilter = null;
@@ -10,8 +10,8 @@ class BallotbuilderController {
     this.totalEnteredNumbers = 0;
     this.enteredNumbers = [];
     this.ballotErrors = [];
-    this.showModal = false;
     this.$uibModal = $uibModal;
+    this.$log = $log;
   }
 
   stateData() {
@@ -76,7 +76,9 @@ class BallotbuilderController {
       this.ballotErrors.push("A number is missing. Number at least 12 boxes consecutively, starting with 1, in the order of your choice.");
     }
 
-    this.showModal = true;
+    this.$log.debug('ballot errors', this.ballotErrors);
+
+    return this.ballotErrors;
   }
 
   buildObjEnteredNumbers() {
@@ -123,12 +125,8 @@ class BallotbuilderController {
     this.totalEnteredNumbers = 0;
   }
 
-  modalClosed(){
-    this.showModal = false;
-  }
-
 }
 
-BallotbuilderController.$inject = ['senateData', '$uibModal'];
+BallotbuilderController.$inject = ['senateData', '$uibModal', '$log'];
 
 export default BallotbuilderController;

@@ -1,21 +1,21 @@
 <div class="modal-header">
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.closeModal()">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="$dismiss()">
     <span aria-hidden="true">&times;</span>
   </button>
   <h4 class="modal-title">Modal title</h4>
 </div>
 <div class="modal-body">
-  <div class="alert alert-success" role="alert" ng-show="vm.errors.length < 1">
+  <div class="alert alert-success" role="alert" ng-show="$resolve.errors.length < 1">
     <i class="fa fa-check"></i>
     Your vote is valid.
   </div>
 
-  <div class="alert alert-danger" role="alert" ng-show="vm.errors.length > 0" ng-repeat="error in vm.errors">
+  <div class="alert alert-danger" role="alert" ng-show="$resolve.errors.length > 0" ng-repeat="error in $resolve.errors">
     <i class="fa fa-times"></i>
     {{error}}
   </div>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.closeModal()">Close</button>
+  <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$close()">Close</button>
 </div>
 
