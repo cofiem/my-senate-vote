@@ -45,6 +45,7 @@ class BallotbuilderController {
       }
     }
 
+    // all the checks only work if the entered numbers are sorted
     this.enteredNumbers = this.enteredNumbers.sort(function (a, b) {
       return a - b;
     });
@@ -59,23 +60,56 @@ class BallotbuilderController {
       this.ballotErrors.push("A number is less than 1 or more than " + candidatesCount + ".");
     }
 
-    // unique
-    var unique = this.enteredNumbers.every(function (currentValue, index, array) {
-      return array.indexOf(currentValue) === index;
-    });
+    // must be unique numbers
+    var unique = this.enteredNumbers.reduce(function (prevValue, currentValue, currentIndex, array) {
+      if (array.indexOf(currentValue) !== currentIndex && !prevValue.includes(currentValue)) {
+        prevValue.push(currentValue);
+      }
+      return prevValue;
+    }, []);
 
-    if (!unique) {
-      this.ballotErrors.push("A number is used more than once.");
+    if (unique.length > 0) {
+      this.ballotErrors.push("A number, or more than one number, is used more than once. Check for these numbers: " + unique.join(', '));
     }
 
-    // must be consecutive and must include at least the numbers 1 - 12
-    var consecutive = this.enteredNumbers.every(function (currentValue, index, array) {
-      return currentValue === (index + 1);
-    });
+    // must be consecutive
+    var consecutive = this.enteredNumbers.reduce(function (prevValue, currentValue, index) {
+      if (currentValue < 1) {
+        return prevValue;
+      }
 
-    if (!consecutive || this.enteredNumbers.length < 12) {
-      this.ballotErrors.push("A number is missing. Number at least 12 boxes consecutively, starting with 1, in the order of your choice.");
+      var check = currentValue === (index + 1);
+
+      if (!check) {
+        var expectedSeenFirst = 1;
+        var seenLast = prevValue.seen.length < 1 ? expectedSeenFirst : prevValue.seen[prevValue.seen.length - 1];
+
+        for (var missingNumber = seenLast + 1; missingNumber < currentValue; missingNumber++) {
+
+          if (!prevValue.missing.includes(missingNumber)) {
+            prevValue.missing.push(missingNumber);
+          }
+        }
+      }
+
+      prevValue.seen.push(currentValue);
+
+      return prevValue;
+    }, {seen: [], missing: []});
+
+    if (consecutive.missing.length > 0) {
+      this.ballotErrors.push("A number is missing. Number boxes consecutively (e.g. 1, 2, 3, ... ). Check for these numbers: " + consecutive.missing.join(', '));
     }
+
+    // must include at least the numbers 1 - 12
+    var requiredNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    var required = requiredNumbers.every(function (currentValue) {
+      return this.enteredNumbers.includes(currentValue);
+    }, this);
+    if (!required) {
+      this.ballotErrors.push("Number at least 12 boxes, starting with 1, in the order of your choice.");
+    }
+
 
     this.$log.debug('ballot errors', this.ballotErrors);
 
@@ -96,7 +130,8 @@ class BallotbuilderController {
   }
 
   createPdf() {
-    this.pdfGenerate.generate(this.stateCandidatesOnly);
+    this.checkBallotEnteredNumbers();
+    this.pdfGenerate.generate(this.stateCandidatesOnly, this.ballotErrors && this.ballotErrors.length > 0);
   }
 
   ballotNumberChange(enteredNumber) {
