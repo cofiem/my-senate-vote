@@ -82,7 +82,7 @@ pdfModel.factory('pdfGenerate', ['$log', 'stateNames', function ($log, stateName
     doc
       .moveTo(edgeMargin, edgeMargin)
       .fontSize(16)
-      .text('My Senate Vote | 2016 Australian Federal Election: Senate how-to-vote card for ' + stateName)
+      .text('MySenateVote.org | 2016 Australian Federal Election: Senate how-to-vote card for ' + stateName)
       .fontSize(11)
       .moveTo(edgeMargin, edgeMargin + headerHeight)
       .text('Use this how-to-vote card on election day to help you fill out your below the ' +
@@ -238,7 +238,7 @@ pdfModel.factory('pdfGenerate', ['$log', 'stateNames', function ($log, stateName
       var yErrorText = edgeMargin + headerHeight + descHeight;
       doc
         .fontSize(60)
-        .text('This ballot contains errors!', xErrorText, yErrorText);
+        .text('This ballot paper may not be counted!', xErrorText, yErrorText);
     }
 
     for (var pageIndex = 0; pageIndex < pages; pageIndex++) {
