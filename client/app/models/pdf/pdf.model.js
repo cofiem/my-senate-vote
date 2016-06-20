@@ -90,12 +90,12 @@ pdfModel.factory('pdfGenerate', ['$log', 'stateNames', function ($log, stateName
         'but it will have the same party and candidate boxes, in the same order.');
   };
 
-  var drawRow = function drawRow(x, y, width, height, doc, groups) {
+  var drawRow = function drawRow(x, y, width, height, edgeMargin, doc, groups) {
     // draw the line above the row
     doc
       .moveTo(x, y)
       .lineWidth(3)
-      .lineTo(width, y)
+      .lineTo(width + edgeMargin, y)
       .stroke();
 
     var groupCount = groups.length;
@@ -265,7 +265,7 @@ pdfModel.factory('pdfGenerate', ['$log', 'stateNames', function ($log, stateName
 
         $log.debug('row', rowIndex, groupsSlice);
 
-        drawRow(xRow, yRow, widthRow, rowHeight, doc, groupsSlice);
+        drawRow(xRow, yRow, widthRow, rowHeight, edgeMargin, doc, groupsSlice);
       }
     }
 

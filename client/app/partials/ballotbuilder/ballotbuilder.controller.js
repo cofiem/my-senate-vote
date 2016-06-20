@@ -74,14 +74,16 @@ class BallotbuilderController {
 
     // must be consecutive
     var consecutive = this.enteredNumbers.reduce(function (prevValue, currentValue, index) {
+      // ignore 0
       if (currentValue < 1) {
         return prevValue;
       }
 
+      // the current value must match index + 1 to be consecutive, as enteredNumbers is sorted
       var check = currentValue === (index + 1);
 
       if (!check) {
-        var expectedSeenFirst = 1;
+        var expectedSeenFirst = 0;
         var seenLast = prevValue.seen.length < 1 ? expectedSeenFirst : prevValue.seen[prevValue.seen.length - 1];
 
         for (var missingNumber = seenLast + 1; missingNumber < currentValue; missingNumber++) {

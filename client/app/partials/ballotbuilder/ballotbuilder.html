@@ -21,7 +21,7 @@
         <form class="form-inline pull-right">
           <input type="text" min="1" max="{{vm.stateCandidatesCount}}" step="1" class="form-control"
                  style="width:55px;" class="form-control" ng-model="candidate.enteredNumber"
-                 pattern="^[0-9]{0,3}$" ng-pattern-restrict="^[0-9]{0,3}$"
+                 pattern="^([1-9][0-9]{0,2})?$" ng-pattern-restrict="^([1-9][0-9]{0,2})?$"
                  ng-change="vm.ballotNumberChange(candidate.enteredNumber)"/>
         </form>
         <h3 class="panel-title">
