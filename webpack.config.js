@@ -18,7 +18,12 @@ module.exports = {
       {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/i, loader: "file"},
       {test: /\.otf(\?v=\d+\.\d+\.\d+)?$/i, loader: "file"},
       {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/i, loader: "url?limit=10000&mimetype=image/svg+xml"},
-      {test: /\.(png|jpg)$/, loader: 'file?name=[path][name].[ext]?[hash]&context=/client' }
+      {test: /\.(png|jpg)$/, loader: 'file?name=[path][name].[ext]?[hash]&context=/client'},
+      // see https://github.com/devongovett/pdfkit/issues/478
+      {test: /pdfkit|png-js/, loader: "transform?brfs"},
+      // see https://github.com/Flipboard/react-canvas/issues/110
+      {test: /\.js$/,include: /linebreak/, loader: "transform?brfs"},
+      {test: /\.json$/, loader: "json-loader"}
     ]
   },
   plugins: [

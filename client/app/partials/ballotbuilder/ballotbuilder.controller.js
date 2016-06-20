@@ -1,5 +1,5 @@
 class BallotbuilderController {
-  constructor(senateData, $uibModal, $log) {
+  constructor(senateData, $uibModal, $log, pdfGenerate) {
     this.name = 'ballotbuilder';
     this.senateData = senateData;
     this.candidateFilter = null;
@@ -12,6 +12,7 @@ class BallotbuilderController {
     this.ballotErrors = [];
     this.$uibModal = $uibModal;
     this.$log = $log;
+    this.pdfGenerate = pdfGenerate;
   }
 
   stateData() {
@@ -95,7 +96,7 @@ class BallotbuilderController {
   }
 
   createPdf() {
-
+    this.pdfGenerate.generate(this.stateCandidatesOnly);
   }
 
   ballotNumberChange(enteredNumber) {
@@ -127,6 +128,6 @@ class BallotbuilderController {
 
 }
 
-BallotbuilderController.$inject = ['senateData', '$uibModal', '$log'];
+BallotbuilderController.$inject = ['senateData', '$uibModal', '$log', 'pdfGenerate'];
 
 export default BallotbuilderController;
