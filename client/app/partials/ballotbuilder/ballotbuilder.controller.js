@@ -73,7 +73,8 @@ class BallotbuilderController {
     }
 
     // must be consecutive
-    var consecutive = this.enteredNumbers.reduce(function (prevValue, currentValue, index) {
+    var uniqueForConsecutiveCheck = this.enteredNumbers.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
+    var consecutive = uniqueForConsecutiveCheck.reduce(function (prevValue, currentValue, index) {
       // ignore 0
       if (currentValue < 1) {
         return prevValue;

@@ -82,7 +82,7 @@ pdfModel.factory('pdfGenerate', ['$log', 'stateNames', function ($log, stateName
     doc
       .moveTo(edgeMargin, edgeMargin)
       .fontSize(16)
-      .text('MySenateVote.org | 2016 Australian Federal Election: Senate how-to-vote card for ' + stateName)
+      .text('2016 Australian Federal Election: Senate how-to-vote card for ' + stateName)
       .fontSize(11)
       .moveTo(edgeMargin, edgeMargin + headerHeight)
       .text('Use this how-to-vote card on election day to help you fill out your below the ' +
@@ -101,6 +101,9 @@ pdfModel.factory('pdfGenerate', ['$log', 'stateNames', function ($log, stateName
     var groupCount = groups.length;
     var colWidth = width / groupCount;
     var colLastIndex = groupCount - 1;
+
+    // log some stats
+    $log.debug('number of groups', groupCount);
 
     $log.debug('row candidate total', groups.reduce(function (previousValue, currentValue) {
       return previousValue + currentValue.length;
@@ -219,15 +222,24 @@ pdfModel.factory('pdfGenerate', ['$log', 'stateNames', function ($log, stateName
 
     // put candiates into groups
     var groups = groupCandidates(candidatesContainer);
+    var groupCount = groups.length;
 
     // calculate the width of a column based on the number of party groups
-    //var maxColsPerRow = 11;
+    var maxColsPerRow = 11;
     //var minColsPerRow = 6;
-    var pages = 2;
+
+    var rowsWithMaxCols = Math.ceil(groupCount / maxColsPerRow);
+
     var rowCount = 4;
+    if (rowsWithMaxCols <= 2) {
+      rowCount = 2;
+    }
+
+    var pages = rowCount > 2 ? 2 : 1;
+
     var rowsPerPage = Math.ceil(rowCount / pages);
     var widthRow = pageWidth - bothMargins;
-    var groupsPerRow = Math.ceil(groups.length / rowCount);
+    var groupsPerRow = Math.ceil(groupCount / rowCount);
 
     var rowHeight = (pageHeight - bothMargins - headerHeight - descHeight) / rowsPerPage;
     var xRow = edgeMargin;
@@ -235,16 +247,28 @@ pdfModel.factory('pdfGenerate', ['$log', 'stateNames', function ($log, stateName
     // if there are errors, make this obvious
     if (hasErrors) {
       var xErrorText = edgeMargin;
-      var yErrorText = edgeMargin + headerHeight + descHeight;
+      var yErrorText = rowHeight + headerHeight + descHeight - 3;
       doc
-        .fontSize(60)
-        .text('This ballot paper may not be counted!', xErrorText, yErrorText);
+        .fontSize(20)
+        .text('THIS BALLOT PAPER IS NOT A VALID VOTE - IT MAY NOT BE COUNTED!', xErrorText, yErrorText);
     }
 
     for (var pageIndex = 0; pageIndex < pages; pageIndex++) {
+
       if (pageIndex > 0) {
         doc.addPage();
       }
+
+      // add page number
+      var pageNumberText = (pageIndex + 1).toString() + ' - MySenateVote.org';
+      var xPageNumberText = 12;
+      var yPageNumberText = 10;
+
+      doc
+        .fontSize(12)
+        .text(pageNumberText, xPageNumberText, yPageNumberText);
+
+      $log.debug('page number', pageNumberText, xPageNumberText, yPageNumberText);
 
       var yRowStart = edgeMargin;
       if (pageIndex == 0) {
