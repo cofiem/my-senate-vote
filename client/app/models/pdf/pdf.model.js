@@ -86,7 +86,7 @@ pdfModel.factory('pdfGenerate', ['$log', 'stateNames', function ($log, stateName
       .fontSize(11)
       .moveTo(edgeMargin, edgeMargin + headerHeight)
       .text('Use this how-to-vote card on election day to help you fill out your below the ' +
-        'line vote for the ' + stateName + ' senate. The ballot paper you get won\'t look quite the same, ' +
+        'line vote for the ' + stateName + ' Senate candidates. The ballot paper you get won\'t look quite the same, ' +
         'but it will have the same party and candidate boxes, in the same order.');
   };
 
@@ -149,7 +149,7 @@ pdfModel.factory('pdfGenerate', ['$log', 'stateNames', function ($log, stateName
       doc
         .fontSize(12)
         .text(ticketId, xPartyName, yPartyName, {width: colWidth, continued: true, height: partyNameHeight})
-        .fontSize(9)
+        .fontSize(10)
         .text(partyName);
 
       // draw the candidate boxes and number (if present)
@@ -261,11 +261,11 @@ pdfModel.factory('pdfGenerate', ['$log', 'stateNames', function ($log, stateName
 
       // add page number
       var pageNumberText = (pageIndex + 1).toString() + ' - MySenateVote.org';
-      var xPageNumberText = 12;
-      var yPageNumberText = 10;
+      var xPageNumberText = 10;
+      var yPageNumberText = 8;
 
       doc
-        .fontSize(12)
+        .fontSize(14)
         .text(pageNumberText, xPageNumberText, yPageNumberText);
 
       $log.debug('page number', pageNumberText, xPageNumberText, yPageNumberText);

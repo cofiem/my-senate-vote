@@ -1,7 +1,19 @@
 class BallotbuilderController {
-  constructor(senateData, $uibModal, $log, pdfGenerate) {
+  constructor(senateData, $uibModal, $log, $localStorage, pdfGenerate) {
     this.name = 'ballotbuilder';
+
     this.senateData = senateData;
+    this.$uibModal = $uibModal;
+    this.$log = $log;
+    this.$storage = $localStorage;
+    this.pdfGenerate = pdfGenerate;
+
+    // init storage for this state/territory's candidate numbers
+    // stores an object in $storage.stateTerrName that is { ballot Id (group id + ticket num): enteredNumber }
+    var stateTerrName = this.electionState.toUpperCase();
+    this.$storage[stateTerrName] = this.$storage[stateTerrName] || {};
+    this.stateBallotStorage = this.$storage[stateTerrName];
+
     this.candidateFilter = null;
     this.candidateOrder = [];
     this.stateCandidatesOnly = this.stateData();
@@ -10,9 +22,10 @@ class BallotbuilderController {
     this.totalEnteredNumbers = 0;
     this.enteredNumbers = [];
     this.ballotErrors = [];
-    this.$uibModal = $uibModal;
-    this.$log = $log;
-    this.pdfGenerate = pdfGenerate;
+
+    // update counts and info
+    this.updateEnteredNumbersCount();
+    this.checkBallotEnteredNumbers();
   }
 
   stateData() {
@@ -20,8 +33,19 @@ class BallotbuilderController {
     var filteredData = this.senateData.filter(function (element, index, array) {
       var matchResult = element.state_ab == electionStateUpperCase;
       //console.log('stateData', matchResult, element.state_ab, electionStateUpperCase);
+
+      if (matchResult) {
+        element.custom_id = this.buildId(element);
+
+        // load any existing enteredNumber
+        var existingValue = this.stateBallotStorage[element.custom_id];
+        if (existingValue) {
+          element.enteredNumber = existingValue;
+        }
+      }
+
       return matchResult;
-    });
+    }, this);
 
     return filteredData;
   }
@@ -73,7 +97,9 @@ class BallotbuilderController {
     }
 
     // must be consecutive
-    var uniqueForConsecutiveCheck = this.enteredNumbers.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
+    var uniqueForConsecutiveCheck = this.enteredNumbers.filter(function (item, i, ar) {
+      return ar.indexOf(item) === i;
+    });
     var consecutive = uniqueForConsecutiveCheck.reduce(function (prevValue, currentValue, index) {
       // ignore 0
       if (currentValue < 1) {
@@ -106,13 +132,17 @@ class BallotbuilderController {
 
     // must include at least the numbers 1 - 12
     var requiredNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-    var required = requiredNumbers.every(function (currentValue) {
-      return this.enteredNumbers.includes(currentValue);
-    }, this);
-    if (!required) {
-      this.ballotErrors.push("Number at least 12 boxes, starting with 1, in the order of your choice.");
+    var required = requiredNumbers.reduce(function (previousValue, currentValue) {
+      if (!previousValue.entered.includes(currentValue)) {
+        previousValue.missing.push(currentValue);
+      }
+      return previousValue;
+    }, {missing: [], entered: this.enteredNumbers});
+    if (required.missing.length > 0) {
+      this.ballotErrors.push("The Australian Electoral Commission's instructions for voting below the line " +
+        "are to number at least 12 boxes, starting with 1, in the order of your choice. " +
+        "Check for these numbers: " + required.missing.join(', '));
     }
-
 
     this.$log.debug('ballot errors', this.ballotErrors);
 
@@ -137,13 +167,7 @@ class BallotbuilderController {
     this.pdfGenerate.generate(this.stateCandidatesOnly, this.ballotErrors && this.ballotErrors.length > 0);
   }
 
-  ballotNumberChange(enteredNumber) {
-    if (enteredNumber) {
-      this.mostRecentEnteredNumber = enteredNumber;
-    } else {
-      this.mostRecentEnteredNumber = '?';
-    }
-
+  updateEnteredNumbersCount() {
     this.totalEnteredNumbers = this.stateCandidatesOnly.reduce(function (previousValue, currentValue, currentIndex, array) {
       if (currentValue.enteredNumber) {
         return previousValue + 1;
@@ -151,6 +175,27 @@ class BallotbuilderController {
         return previousValue;
       }
     }, 0);
+  }
+
+  ballotNumberChange(candidate) {
+    var enteredNumber = candidate.enteredNumber;
+    if (enteredNumber) {
+      this.mostRecentEnteredNumber = enteredNumber;
+    } else {
+      this.mostRecentEnteredNumber = '?';
+    }
+
+    this.updateEnteredNumbersCount();
+
+    // update stored entries
+    var ballotId = this.buildId(candidate);
+    if (enteredNumber) {
+      this.stateBallotStorage[ballotId] = enteredNumber;
+    } else {
+      delete this.stateBallotStorage[ballotId];
+    }
+
+    this.$log.debug('current local storage content after number change', this.$storage);
   }
 
   clearEnteredNumbers() {
@@ -162,10 +207,19 @@ class BallotbuilderController {
 
     this.mostRecentEnteredNumber = '?';
     this.totalEnteredNumbers = 0;
+
+    // clear the local storage
+    for (var key in this.stateBallotStorage) {
+      if (this.stateBallotStorage.hasOwnProperty(key)) {
+        delete this.stateBallotStorage[key];
+      }
+    }
+
+    this.$log.debug('current local storage content after clearing all', this.$storage);
   }
 
 }
 
-BallotbuilderController.$inject = ['senateData', '$uibModal', '$log', 'pdfGenerate'];
+BallotbuilderController.$inject = ['senateData', '$uibModal', '$log', '$localStorage', 'pdfGenerate'];
 
 export default BallotbuilderController;

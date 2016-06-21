@@ -5,7 +5,19 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [keeps a c
 
 ## Unreleased
 
-## First release (2016-06-20)
+## v0.2.0 (2016-06-22)
+
+### Added
+
+ - [2016-06-21] Implemented saving using localStorage.
+ - [2016-06-21] Can also filter by the vote numbers entered.
+ - [2016-06-21] Added voting instructions.
+
+### Fixed
+
+ - [2016-06-22] Pdf layout fixes.
+
+## v0.1.0 (2016-06-20)
 
 ### Added
 

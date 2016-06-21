@@ -1,15 +1,20 @@
 <div class="row" style="margin-bottom: 5px;">
-  <div class="col-md-4">
+  <div class="col-md-5">
+    Instructions: Type a number in the text box beside a candidate's name.
+    Number at least 12 boxes consecutively in the order of your choice.
     Showing <strong>{{filteredArray.length}}</strong> of <strong>{{vm.stateCandidatesCount}}</strong> candidates.
   </div>
-  <div class="col-md-4">
+  <div class="col-md-4 hidden-print">
     <ballotmodal title="My Title" component="test-component" errors="vm.checkBallotEnteredNumbers()"></ballotmodal>
     <button type="button" class="btn btn-default" ng-click="vm.createPdf()">Create pdf for printing</button>
   </div>
-  <div class="col-md-4 text-right">
-    <span class="label label-default">Most recent: {{vm.mostRecentEnteredNumber}}</span>
-    <span class="label label-default">Total placed: {{vm.totalEnteredNumbers}}</span>
-    <button type="button" class="btn btn-default" ng-click="vm.clearEnteredNumbers()">Clear all</button>
+  <div class="col-md-2">
+    Last number placed: {{vm.mostRecentEnteredNumber}}<br>
+    Total numbers placed: {{vm.totalEnteredNumbers}}
+  </div>
+  <div class="col-md-1">
+    <button type="button" class="btn btn-default hidden-print" ng-click="vm.clearEnteredNumbers()">Clear numbers
+    </button>
   </div>
 </div>
 <div class="row">
@@ -22,10 +27,10 @@
           <input type="text" min="1" max="{{vm.stateCandidatesCount}}" step="1" class="form-control"
                  style="width:55px;" class="form-control" ng-model="candidate.enteredNumber"
                  pattern="^([1-9][0-9]{0,2})?$" ng-pattern-restrict="^([1-9][0-9]{0,2})?$"
-                 ng-change="vm.ballotNumberChange(candidate.enteredNumber)"/>
+                 ng-change="vm.ballotNumberChange(candidate)"/>
         </form>
         <h3 class="panel-title">
-          <a href="">{{candidate.ballot_given_nm}} {{candidate.surname}}</a>
+          {{candidate.ballot_given_nm}} {{candidate.surname}}
         </h3>
         <small>{{candidate.party_ballot_nm}}</small>
 

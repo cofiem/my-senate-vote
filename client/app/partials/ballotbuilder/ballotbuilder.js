@@ -24,8 +24,10 @@ let ballotbuilderModule = angular.module('ballotbuilder', [
             element.occupation.toUpperCase().includes(filterStringUpper);
           var search_attr = element.hasOwnProperty('search_attr') &&
             element.search_attr.toUpperCase().includes(filterStringUpper);
+          var enteredNumber = element.hasOwnProperty('enteredNumber') &&
+            element.enteredNumber.toUpperCase().includes(filterStringUpper);
 
-          return firstName || lastName || partyName || occupation || search_attr;
+          return firstName || lastName || partyName || occupation || search_attr || enteredNumber;
         });
       } else {
         return candidatesArray;
