@@ -1,3 +1,5 @@
+This project is archived. See https://github.com/cofiem/voteplan
+
 # My Senate Vote
 
 Prepare your below the line senate vote before the 2016 Australian federal election.
